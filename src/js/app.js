@@ -14,8 +14,6 @@ function init() {
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
 
-    const faceDetected = true;
-
     const tracker = new tracking.ObjectTracker('face');
 
     tracker.setInitialScale(4);
@@ -26,16 +24,16 @@ function init() {
         camera: true
     });
 
-    if (faceDetected) {
-        tracker.on('track', _.throttle(event => {
-            console.log('Cheguei aqui!!!' + event);
+    tracker.on('track', _.throttle(event => {
+        context.clearRect(0,0, canvas.width, canvas.height);
 
-            // console.log(tracker);
+        if (event.data.length > 0) {
+            console.log('Cheguei aqui!!!', event);
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             event.data.forEach(rect => {
 
-                //console.log(event.data);
+                console.log(event.data);
 
                 context.strokeStyle = '#ff0000';
                 context.strokeRect(rect.x, rect.y, rect.width, rect.height);
@@ -47,9 +45,9 @@ function init() {
                 context.fillText(`x: ${rect.x}, w: ${rect.width}`, rect.x + rect.width + 20, rect.y + 20);
                 context.fillText(`y: ${rect.y}, h: ${rect.height}`, rect.x + rect.width + 20, rect.y + 40);
             });
-        }, 10000));
-    } else {
-
-    }
+        } else {
+            console.log('Rosto/Face não detectada!');            
+        }
+    }, 10000));
 }
 window.onload = init();
