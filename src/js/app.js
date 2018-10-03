@@ -6,8 +6,6 @@
  * @author: Glaucia Lemos
  */
 
-
-
 'use strict'
 
 function init() {
@@ -15,30 +13,43 @@ function init() {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
-    
+
+    const faceDetected = true;
+
     const tracker = new tracking.ObjectTracker('face');
 
     tracker.setInitialScale(4);
     tracker.setEdgesDensity(0.1);
     tracker.setStepSize(2);
 
-    tracking.track('#video', tracker, { camera: 'true' });
+    tracking.track('#video', tracker, {
+        camera: true
+    });
 
-    tracker.on('track', _.throttle(event => {
-        console.log(event);
-        
-        context.clearRect(0,0, canvas.width, canvas.height);
-        event.data.forEach(rect => {
-            context.strokeStyle = '#ff0000';
-            context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-            context.font = '12px Helvetica';
-            context.fillStyle = "#fff";
-            context.lineWidth = 2;
-            
-            // Aqui estou testando preenchimento de texto de info do canvas que indentifica a face:
-            context.fillText(`x: ${rect.x}, w: ${rect.width}`, rect.x + rect.width + 20, rect.y + 20);
-            context.fillText(`y: ${rect.y}, h: ${rect.height}`, rect.x + rect.width + 20, rect.y + 40);
-        });
-    }, 1000));
+    if (faceDetected) {
+        tracker.on('track', _.throttle(event => {
+            console.log('Cheguei aqui!!!' + event);
+
+            // console.log(tracker);
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            event.data.forEach(rect => {
+
+                //console.log(event.data);
+
+                context.strokeStyle = '#ff0000';
+                context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                context.font = '12px Helvetica';
+                context.fillStyle = "#fff";
+                context.lineWidth = 2;
+
+                // Aqui estou testando preenchimento de texto de info do canvas que indentifica a face:
+                context.fillText(`x: ${rect.x}, w: ${rect.width}`, rect.x + rect.width + 20, rect.y + 20);
+                context.fillText(`y: ${rect.y}, h: ${rect.height}`, rect.x + rect.width + 20, rect.y + 40);
+            });
+        }, 10000));
+    } else {
+
+    }
 }
 window.onload = init();
