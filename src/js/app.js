@@ -9,10 +9,32 @@
 'use strict'
 
 function init() {
+
+    const start_tracking, stop_tracking;
+
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
+    start_tracking.addEventListener('click', start_tracking);
+    stop_tracking.addEventListener('click', stop_tracking);
 
+    // Verificar todas as medias disponíveis no Chrome:
+    navigator.getUserMedia = (
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia);
+
+    if (navigator.getUserMedia) {
+        console.log('Browser tem suporte para media api.');
+
+        navigator.getUserMedia({
+            video : true
+        }, success_stream, error_stream);
+    } else {
+        alert('O browser não tem suporte para o Media Interface!');
+    }
+    
     const tracker = new tracking.ObjectTracker('face');
 
     tracker.setInitialScale(4);
