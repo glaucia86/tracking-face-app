@@ -6,34 +6,15 @@
  * @author: Glaucia Lemos
  */
 
+
+
 'use strict'
 
 function init() {
 
-    const start_tracking, stop_tracking;
-
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
-    start_tracking.addEventListener('click', start_tracking);
-    stop_tracking.addEventListener('click', stop_tracking);
-
-    // Verificar todas as medias disponíveis no Chrome:
-    navigator.getUserMedia = (
-        navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia);
-
-    if (navigator.getUserMedia) {
-        console.log('Browser tem suporte para media api.');
-
-        navigator.getUserMedia({
-            video : true
-        }, success_stream, error_stream);
-    } else {
-        alert('O browser não tem suporte para o Media Interface!');
-    }
     
     const tracker = new tracking.ObjectTracker('face');
 
@@ -43,8 +24,9 @@ function init() {
 
     tracking.track('#video', tracker, { camera: 'true' });
 
-    tracker.on('track', event => {
-        // console.log(event);
+    tracker.on('track', _.throttle(event => {
+        console.log(event);
+        
         context.clearRect(0,0, canvas.width, canvas.height);
         event.data.forEach(rect => {
             context.strokeStyle = '#ff0000';
@@ -57,6 +39,6 @@ function init() {
             context.fillText(`x: ${rect.x}, w: ${rect.width}`, rect.x + rect.width + 20, rect.y + 20);
             context.fillText(`y: ${rect.y}, h: ${rect.height}`, rect.x + rect.width + 20, rect.y + 40);
         });
-    });
+    }, 1000));
 }
 window.onload = init();
