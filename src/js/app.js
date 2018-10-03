@@ -15,7 +15,11 @@ function init() {
 
     const tracker = new tracking.ObjectTracker('face');
 
-    tracking.track('#video', tracker, { camera: true });
+    tracker.setInitialScale(4);
+    tracker.setEdgesDensity(0.1);
+    tracker.setStepSize(2);
+
+    tracking.track('#video', tracker, { camera: 'true' });
 
     tracker.on('track', event => {
         // console.log(event);
