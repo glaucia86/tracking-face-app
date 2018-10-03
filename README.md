@@ -36,7 +36,7 @@ Há necessidade de instalar o http-server, a fim de abrir um servidor para execu
 Bom, agora na mesma tela do cmd, basta iniciar o server para o projeto ser executado localmente.
 
 ```	
-> cd \projects\tracking-face-app
+> cd \projects\tracking-face-app\src
 ```
 
 ```
